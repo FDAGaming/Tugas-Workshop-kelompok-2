@@ -3,6 +3,8 @@ use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\SettingMenuController;
 
 Route::get('/login', [LoginController::class, 'indexlogin'])->name('login');
 Route::get('/register', [LoginController::class, 'indexregister'])->name('register');;
@@ -17,4 +19,6 @@ Route::prefix('')->group(function () {
 
 Route::prefix('dashboard')->middleware('auth.custom')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('menu', MenuController::class);
+    Route::resource('setting_menus', SettingMenuController::class);
 });
