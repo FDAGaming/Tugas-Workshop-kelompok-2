@@ -26,7 +26,6 @@
                                         <div class="text-danger mt-2">{{ $message }}</div>
                                     @enderror
                                 </div>
-
                                 <button type="submit" class="btn btn-primary">Create</button>
                                 <a href="{{ route('kategori.index') }}" class="btn btn-secondary">Cancel</a>
                             </form>
