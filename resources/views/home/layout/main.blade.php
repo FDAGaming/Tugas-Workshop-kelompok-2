@@ -24,6 +24,7 @@
         @include('home.layout.footer')
     </div>
 
+    @yield('script')
     <script src="{{ asset('assets2/js/jquery-3.3.1.min.js') }}"></script>
     <script src="{{ asset('assets2/js/jquery-migrate-3.0.1.min.js') }}"></script>
     <script src="{{ asset('assets2/js/popper.min.js') }}"></script>

@@ -14,7 +14,6 @@
                 </div>
             </div>
 
-            <!-- Edit Menu Form -->
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="card">
@@ -25,20 +24,20 @@
 
                                 <div class="mb-3">
                                     <label for="nama_menu" class="form-label">Nama Menu</label>
-                                    <input type="text" class="form-control" id="nama_menu" name="nama_menu"
-                                        value="{{ $menu->nama_menu }}" required>
+                                    <input type="text" autocomplete="off" class="form-control" id="nama_menu"
+                                        name="nama_menu" value="{{ $menu->nama_menu }}" required>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="link_menu" class="form-label">Nama URL</label>
-                                    <input type="text" class="form-control" id="link_menu" name="link_menu"
-                                        value="{{ $menu->link_menu }}" required>
+                                    <input type="text" autocomplete="off" class="form-control" id="link_menu"
+                                        name="link_menu" value="{{ $menu->link_menu }}" required>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="icon_menu" class="form-label">Icon</label>
-                                    <input type="text" class="form-control" id="icon_menu" name="icon_menu"
-                                        value="{{ $menu->icon_menu }}">
+                                    <input type="text" autocomplete="off" class="form-control" id="icon_menu"
+                                        name="icon_menu" value="{{ $menu->icon_menu }}">
                                 </div>
 
                                 <button type="submit" class="btn btn-primary">Update</button>

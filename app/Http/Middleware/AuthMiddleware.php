@@ -14,7 +14,7 @@ class AuthMiddleware
             if (in_array(Auth::user()->role_id, [1, 3])) {
                 return $next($request);
             } else {
-                return redirect()->route('userpage');
+                return redirect()->route('home');
             }
         }
 

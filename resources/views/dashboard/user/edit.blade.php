@@ -13,7 +13,7 @@
                 </div>
             </div>
 
-            <!-- Edit User Form -->
+
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="card">
@@ -23,16 +23,16 @@
                                 @method('PUT')
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Name</label>
-                                    <input type="text" name="name" class="form-control" value="{{ $user->name }}"
-                                        required>
+                                    <input type="text" autocomplete="off" name="name" class="form-control"
+                                        value="{{ $user->name }}" required>
                                     @error('name')
                                         <div class="text-danger mt-2">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="email" name="email" class="form-control" value="{{ $user->email }}"
-                                        required>
+                                    <input type="email" autocomplete="off" name="email" class="form-control"
+                                        value="{{ $user->email }}" required>
                                     @error('email')
                                         <div class="text-danger mt-2">{{ $message }}</div>
                                     @enderror

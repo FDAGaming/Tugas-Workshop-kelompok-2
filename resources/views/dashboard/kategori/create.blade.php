@@ -21,7 +21,8 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label for="nama_kategori" class="form-label">Nama Kategori</label>
-                                    <input type="text" name="nama_kategori" class="form-control" required>
+                                    <input type="text" autocomplete="off" name="nama_kategori" class="form-control"
+                                        required>
                                     @error('nama_kategori')
                                         <div class="text-danger mt-2">{{ $message }}</div>
                                     @enderror

@@ -21,18 +21,18 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label for="nama_menu" class="form-label">Nama Menu</label>
-                                    <input type="text" class="form-control" id="nama_menu" autocomplete="off"
-                                        name="nama_menu" required value="{{ old('nama_menu') }}">
+                                    <input type="text" autocomplete="off" class="form-control" id="nama_menu"
+                                        autocomplete="off" name="nama_menu" required value="{{ old('nama_menu') }}">
                                 </div>
                                 <div class="mb-3">
                                     <label for="link_menu" class="form-label">Nama URL</label>
-                                    <input type="text" class="form-control" id="link_menu" autocomplete="off"
-                                        name="link_menu" required value="{{ old('link_menu') }}">
+                                    <input type="text" autocomplete="off" class="form-control" id="link_menu"
+                                        autocomplete="off" name="link_menu" required value="{{ old('link_menu') }}">
                                 </div>
                                 <div class="mb-3">
                                     <label for="icon_menu" class="form-label">Icon</label>
-                                    <input type="text" class="form-control" id="icon_menu" name="icon_menu"
-                                        value="{{ old('icon_menu') }}">
+                                    <input type="text" autocomplete="off" class="form-control" id="icon_menu"
+                                        name="icon_menu" value="{{ old('icon_menu') }}">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>

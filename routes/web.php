@@ -9,6 +9,7 @@ use App\Http\Controllers\ObatController;
 use App\Http\Controllers\SettingMenuController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\KeranjangController;
 
 Route::get('/login', [LoginController::class, 'indexlogin'])->name('login');
 Route::get('/register', [LoginController::class, 'indexregister'])->name('register');;
@@ -17,8 +18,16 @@ Route::post('/register', [LoginController::class, 'register']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::prefix('')->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('userpage');
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::middleware('auth.user')->group(function () {
+        Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang.index');
+        Route::post('/keranjang/{id}', [KeranjangController::class, 'store'])->name('keranjang.store');
+        Route::post('/keranjang/{id}/update', [KeranjangController::class, 'update'])->name('keranjang.update');
+        Route::get('/keranjang/{id}/delete', [KeranjangController::class, 'destroy'])->name('keranjang.destroy');
+    });
 });
+
+
 
 
 Route::prefix('dashboard')->middleware('auth.custom')->group(function () {

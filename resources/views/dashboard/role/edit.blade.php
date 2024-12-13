@@ -22,7 +22,7 @@
                                 @method('PUT')
                                 <div class="mb-3">
                                     <label class="form-label">Role Name</label>
-                                    <input type="text" name="nama_role" class="form-control"
+                                    <input type="text" autocomplete="off" name="nama_role" class="form-control"
                                         value="{{ $role->nama_role }}" required>
                                     @error('nama_role')
                                         <div class="text-danger mt-2">{{ $message }}</div>

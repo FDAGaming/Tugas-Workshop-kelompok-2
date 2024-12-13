@@ -21,28 +21,31 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label for="nama_obat" class="form-label">Nama Obat</label>
-                                    <input type="text" name="nama_obat" class="form-control" required>
+                                    <input type="text" autocomplete="off" name="nama_obat" class="form-control" required>
                                     @error('nama_obat')
                                         <div class="text-danger mt-2">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="tanggal_terima" class="form-label">Tanggal Terima</label>
-                                    <input type="date" name="tanggal_terima" class="form-control" required>
+                                    <input type="date" autocomplete="off" name="tanggal_terima" class="form-control"
+                                        required>
                                     @error('tanggal_terima')
                                         <div class="text-danger mt-2">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="jumlah_stock" class="form-label">Jumlah Stock</label>
-                                    <input type="number" name="jumlah_stock" class="form-control" required>
+                                    <input type="number" autocomplete="off" name="jumlah_stock" class="form-control"
+                                        required>
                                     @error('jumlah_stock')
                                         <div class="text-danger mt-2">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="harga" class="form-label">Harga</label>
-                                    <input type="number" name="harga" class="form-control" step="0.01" required>
+                                    <input type="number" autocomplete="off" name="harga" class="form-control"
+                                        step="0.01" required>
                                     @error('harga')
                                         <div class="text-danger mt-2">{{ $message }}</div>
                                     @enderror

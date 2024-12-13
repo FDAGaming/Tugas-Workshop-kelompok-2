@@ -22,7 +22,7 @@
                                 @method('PUT')
                                 <div class="mb-3">
                                     <label for="nama_obat" class="form-label">Nama Obat</label>
-                                    <input type="text" name="nama_obat" class="form-control"
+                                    <input type="text" autocomplete="off" name="nama_obat" class="form-control"
                                         value="{{ $obat->nama_obat }}" required>
                                     @error('nama_obat')
                                         <div class="text-danger mt-2">{{ $message }}</div>
@@ -30,7 +30,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="tanggal_terima" class="form-label">Tanggal Terima</label>
-                                    <input type="date" name="tanggal_terima" class="form-control"
+                                    <input type="date" autocomplete="off" name="tanggal_terima" class="form-control"
                                         value="{{ $obat->tanggal_terima->format('Y-m-d') }}" required>
                                     @error('tanggal_terima')
                                         <div class="text-danger mt-2">{{ $message }}</div>
@@ -38,7 +38,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="jumlah_stock" class="form-label">Jumlah Stock</label>
-                                    <input type="number" name="jumlah_stock" class="form-control"
+                                    <input type="number" autocomplete="off" name="jumlah_stock" class="form-control"
                                         value="{{ $obat->jumlah_stock }}" required>
                                     @error('jumlah_stock')
                                         <div class="text-danger mt-2">{{ $message }}</div>
@@ -46,8 +46,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="harga" class="form-label">Harga</label>
-                                    <input type="number" name="harga" class="form-control" step="0.01"
-                                        value="{{ $obat->harga }}" required>
+                                    <input type="number" autocomplete="off" name="harga" class="form-control"
+                                        step="0.01" value="{{ $obat->harga }}" required>
                                     @error('harga')
                                         <div class="text-danger mt-2">{{ $message }}</div>
                                     @enderror

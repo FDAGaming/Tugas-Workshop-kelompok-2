@@ -58,53 +58,38 @@
      </div>
 
      <div class="site-section">
-         <div class="container">
-             <div class="row">
-                 <div class="title-section text-center col-12">
-                     <h2 class="text-uppercase">Popular Products</h2>
-                 </div>
+         <div class="container mt-5">
+             <div class="text-center mb-4">
+                 <h2>Obat</h2>
+             </div>
+
+             <div class="text-center mb-4">
+                 <button class="btn btn-outline-primary filter-btn active" data-filter="all">All</button>
+                 @foreach ($kategoris as $kategori)
+                     <button class="btn btn-outline-primary filter-btn" data-filter="{{ $kategori->id }}">
+                         {{ $kategori->nama_kategori }}
+                     </button>
+                 @endforeach
              </div>
 
              <div class="row">
-                 <div class="col-sm-6 col-lg-4 text-center item mb-4">
-                     <span class="tag">Sale</span>
-                     <a href="shop-single.html"> <img src="{{ asset('assets2/images/product_01.png') }}" alt="Image"></a>
-                     <h3 class="text-dark"><a href="shop-single.html">Bioderma</a></h3>
-                     <p class="price"><del>95.00</del> &mdash; $55.00</p>
-                 </div>
-                 <div class="col-sm-6 col-lg-4 text-center item mb-4">
-                     <a href="shop-single.html"> <img src="{{ asset('assets2/images/product_02.png') }}" alt="Image"></a>
-                     <h3 class="text-dark"><a href="shop-single.html">Chanca Piedra</a></h3>
-                     <p class="price">$70.00</p>
-                 </div>
-                 <div class="col-sm-6 col-lg-4 text-center item mb-4">
-                     <a href="shop-single.html"> <img src="{{ asset('assets2/images/product_03.png') }}" alt="Image"></a>
-                     <h3 class="text-dark"><a href="shop-single.html">Umcka Cold Care</a></h3>
-                     <p class="price">$120.00</p>
-                 </div>
-
-                 <div class="col-sm-6 col-lg-4 text-center item mb-4">
-
-                     <a href="shop-single.html"> <img src="{{ asset('assets2/images/product_04.png') }}" alt="Image"></a>
-                     <h3 class="text-dark"><a href="shop-single.html">Cetyl Pure</a></h3>
-                     <p class="price"><del>45.00</del> &mdash; $20.00</p>
-                 </div>
-                 <div class="col-sm-6 col-lg-4 text-center item mb-4">
-                     <a href="shop-single.html"> <img src="{{ asset('assets2/images/product_05.png') }}" alt="Image"></a>
-                     <h3 class="text-dark"><a href="shop-single.html">CLA Core</a></h3>
-                     <p class="price">$38.00</p>
-                 </div>
-                 <div class="col-sm-6 col-lg-4 text-center item mb-4">
-                     <span class="tag">Sale</span>
-                     <a href="shop-single.html"> <img src="{{ asset('assets2/images/product_06.png') }}" alt="Image"></a>
-                     <h3 class="text-dark"><a href="shop-single.html">Poo Pourri</a></h3>
-                     <p class="price"><del>$89</del> &mdash; $38.00</p>
-                 </div>
-             </div>
-             <div class="row mt-5">
-                 <div class="col-12 text-center">
-                     <a href="shop.html" class="btn btn-primary px-4 py-3">View All Products</a>
-                 </div>
+                 @foreach ($obats as $obat)
+                     <div class="col-md-4 filter-item {{ $obat->kategori_id }}">
+                         <div class="card">
+                             <img src="{{ asset('storage/' . $obat->foto) }}" class="card-img-top"
+                                 alt="{{ $obat->nama_obat }}">
+                             <div class="card-body text-center">
+                                 <h5 class="card-title">{{ $obat->nama_obat }}</h5>
+                                 <p class="card-text">Rp{{ number_format($obat->harga, 0, ',', '.') }}</p>
+                                 <form action="{{ url('/keranjang/' . $obat->id) }}" method="POST">
+                                     @csrf
+                                     <input type="hidden" name="kuantitas" value="1">
+                                     <button type="submit" class="btn btn-primary">Masukkan Keranjang</button>
+                                 </form>
+                             </div>
+                         </div>
+                     </div>
+                 @endforeach
              </div>
          </div>
      </div>
@@ -255,4 +240,30 @@
              </div>
          </div>
      </div>
+ @endsection
+
+ @section('script')
+     <script>
+         document.addEventListener("DOMContentLoaded", function() {
+             const filterButtons = document.querySelectorAll(".filter-btn");
+             const filterItems = document.querySelectorAll(".filter-item");
+
+             filterButtons.forEach((button) => {
+                 button.addEventListener("click", function() {
+                     const filter = this.getAttribute("data-filter");
+
+                     filterButtons.forEach((btn) => btn.classList.remove("active"));
+                     this.classList.add("active");
+
+                     filterItems.forEach((item) => {
+                         if (filter === "all" || item.classList.contains(filter)) {
+                             item.style.display = "block";
+                         } else {
+                             item.style.display = "none";
+                         }
+                     });
+                 });
+             });
+         });
+     </script>
  @endsection
