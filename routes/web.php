@@ -2,9 +2,13 @@
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\ObatController;
 use App\Http\Controllers\SettingMenuController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\RoleController;
 
 Route::get('/login', [LoginController::class, 'indexlogin'])->name('login');
 Route::get('/register', [LoginController::class, 'indexregister'])->name('register');;
@@ -21,4 +25,8 @@ Route::prefix('dashboard')->middleware('auth.custom')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('menu', MenuController::class);
     Route::resource('setting_menus', SettingMenuController::class);
+    Route::resource('user', UserController::class);
+    Route::resource('role', RoleController::class);
+    Route::resource('kategori', KategoriController::class);
+    Route::resource('obat', ObatController::class);
 });

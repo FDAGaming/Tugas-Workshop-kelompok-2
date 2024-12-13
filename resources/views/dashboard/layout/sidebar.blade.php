@@ -21,7 +21,7 @@
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
-                <li class="nav-item active">
+                <li class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
                     <a data-bs-toggle="collapse" href="#dashboard" class="collapsed" aria-expanded="false">
                         <i class="fas fa-home"></i>
                         <p>Dashboard</p>
@@ -29,7 +29,7 @@
                     </a>
                     <div class="collapse" id="dashboard">
                         <ul class="nav nav-collapse">
-                            <li>
+                            <li class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
                                 <a href="{{ route('dashboard') }}">
                                     <span class="sub-item">Dashboard</span>
                                 </a>
@@ -37,12 +37,13 @@
                         </ul>
                     </div>
                 </li>
+
                 <li class="nav-section">
                     <span class="sidebar-mini-icon">
                         <i class="fa fa-ellipsis-h"></i>
                     </span>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {{ request()->is('dashboard/*') ? 'active-bg' : '' }}">
                     <a data-bs-toggle="collapse" href="#base">
                         <i class="fas fa-layer-group"></i>
                         <p>List Menu</p>
@@ -58,7 +59,7 @@
                             @endphp
 
                             @foreach ($menus as $menu)
-                                <li>
+                                <li class="{{ request()->is('dashboard/' . $menu->link_menu . '*') ? 'active' : '' }}">
                                     <a href="/dashboard/{{ $menu->link_menu }}"
                                         class="{{ request()->is('dashboard/' . $menu->link_menu . '*') ? 'active' : '' }}">
                                         <span class="sub-item">{{ $menu->nama_menu }}</span>
@@ -67,7 +68,6 @@
                             @endforeach
                         </ul>
                     </div>
-
                 </li>
             </ul>
         </div>

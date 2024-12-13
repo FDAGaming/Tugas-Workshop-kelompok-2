@@ -17,7 +17,7 @@ class SettingMenuSeeder extends Seeder
         DB::table('setting_menus')->truncate();
 
         $menuAssignments = [
-            1 => [1, 2,],
+            1 => [1, 2, 3, 4, 5, 6],
         ];
 
         foreach ($menuAssignments as $role_id => $menu_ids) {
