@@ -42,3 +42,11 @@ Route::prefix('dashboard')->middleware('auth.custom')->group(function () {
     Route::resource('kategori', KategoriController::class);
     Route::resource('obat', ObatController::class);
 });
+
+Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang.index');
+Route::post('/keranjang/checkout', [KeranjangController::class, 'checkout'])->name('keranjang.checkout');
+
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+        Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+        Route::post('/midtrans/notification', [CheckoutController::class, 'notification'])->name('midtrans.notification');
+        Route::get('/checkout_sukses/{checkoutId}', [CheckoutController::class, 'simulateSuccess']);

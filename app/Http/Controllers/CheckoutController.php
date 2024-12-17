@@ -2,68 +2,122 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Keranjang;
+use App\Models\Checkout;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Midtrans\Config;
+use Midtrans\Snap;
 
 class CheckoutController extends Controller
 {
-    /**
-     * Menampilkan halaman checkout.
-     */
-    public function index()
-{
-    $keranjangItems = auth()->user()->keranjang()->with('obat')->get(); // Menggunakan relasi yang sudah didefinisikan
-
-    // Periksa apakah keranjang kosong
-    if ($keranjangItems->isEmpty()) {
-        return redirect('/keranjang')->with('error', 'Keranjang belanja Anda kosong.');
+    public function __construct()
+    {
+        Config::$serverKey = config('services.midtrans.server_key');
+        Config::$isProduction = config('services.midtrans.is_production');
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
     }
 
-    // Kalkulasi total harga
-    $totalHarga = $keranjangItems->sum(function ($item) {
-        return $item->obat->harga * $item->kuantitas;
-    });
+    public function index()
+    {
+        $keranjangs = Keranjang::with('nft')->where('user_id', Auth::id())->get();
 
-    return view('checkout.index', compact('keranjangItems', 'totalHarga'));
-}
-
-
-    /**
-     * Memproses checkout dan mengurangi stok barang.
-     */
-    public function prosesCheckout()
-{
-    DB::transaction(function () {
-        $keranjangItems = auth()->user()->keranjang;
-
-        foreach ($keranjangItems as $item) {
-            $obat = $item->obat;
-
-            // Periksa apakah stok cukup
-            if ($obat->jumlah_stock < $item->kuantitas) {
-                throw new \Exception('Stok obat ' . $obat->nama_obat . ' tidak mencukupi.');
-            }
-
-            // Kurangi stok
-            $obat->jumlah_stock -= $item->kuantitas;
-            $obat->save();
-
-            // // Simpan transaksi (opsional)
-            // DB::table('transaksi')->insert([
-            //     'user_id' => auth()->id(),
-            //     'obat_id' => $obat->id,
-            //     'kuantitas' => $item->kuantitas,
-            //     'total_harga' => $obat->harga * $item->kuantitas,
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ]);
+        if ($keranjangs->isEmpty()) {
+            return redirect()->route('keranjang.index')->with('error', 'Keranjang Anda kosong.');
         }
 
-        // Kosongkan keranjang
-        DB::table('keranjangs')->where('user_id', auth()->id())->delete();
-    });
+        $totalHarga = $keranjangs->sum(function ($keranjang) {
+            return $keranjang->nft->harga_akhir ?? 0;
+        });
 
-    return redirect('/')->with('success', 'Checkout berhasil! Pesanan Anda sedang diproses.');
+        $checkout = Checkout::where('user_id', Auth::id())
+            ->whereIn('status', ['pending', 'success'])
+            ->latest()
+            ->first();
+
+        if (!$checkout) {
+            $checkout = Checkout::create([
+                'user_id' => Auth::id(),
+                'total_harga' => $totalHarga,
+                'status' => 'pending',
+            ]);
+        }
+
+        $snapToken = null;
+        if ($checkout->status === 'pending') {
+            $userEmail = Auth::user()->email;
+        
+            if (empty($userEmail) || !filter_var($userEmail, FILTER_VALIDATE_EMAIL)) {
+                $userEmail = 'no-reply@example.com';
+            }
+        
+            $transaction = [
+                'transaction_details' => [
+                    'order_id' => 'ORDER-' . $checkout->id,
+                    'gross_amount' => $checkout->total_harga,
+                ],
+                'customer_details' => [
+                    'first_name' => Auth::user()->name,
+                    'email' => $userEmail,
+                ],
+            ];
+            $snapToken = Snap::getSnapToken($transaction);
+        }
+        return view('userpage.checkout', compact('keranjangs', 'totalHarga', 'checkout', 'snapToken'));
+    }
+    public function notification(Request $request)
+    {
+        $notification = json_decode($request->getContent(), true);
+        $transactionStatus = $notification['transaction_status'];
+        $orderId = $notification['order_id'];
+    
+        $checkoutId = str_replace('ORDER-', '', $orderId);
+        $checkout = Checkout::find($checkoutId);
+    
+        if ($checkout) {
+            if (in_array($transactionStatus, ['capture', 'settlement'])) {
+                $checkout->update(['status' => 'success']);
+    
+                $keranjangs = Keranjang::where('user_id', $checkout->user_id)->get();
+                foreach ($keranjangs as $keranjang) {
+                    \App\Models\NftUser::create([
+                        'user_id' => $checkout->user_id,
+                        'nft_id' => $keranjang->nft_id,
+                    ]);
+                    $keranjang->delete(); 
+                }
+            } elseif (in_array($transactionStatus, ['deny', 'cancel', 'expire'])) {
+                $checkout->update(['status' => 'failed']);
+            } elseif ($transactionStatus == 'pending') {
+                $checkout->update(['status' => 'pending']);
+            }
+        }
+    
+        return response()->json(['status' => 'ok']);
+    }
+
+    public function simulateSuccess($checkoutId)
+{
+    $checkout = Checkout::findOrFail($checkoutId);
+
+    if ($checkout->status === 'pending') {
+        $checkout->update(['status' => 'success']);
+
+        $keranjangs = Keranjang::where('user_id', $checkout->user_id)->get();
+        foreach ($keranjangs as $keranjang) {
+            \App\Models\NftUser::create([
+                'user_id' => $checkout->user_id,
+                'nft_id' => $keranjang->nft_id,
+            ]);
+            $keranjang->delete(); 
+        }
+
+        return response()->json(['message' => 'Simulasi pembayaran sukses. NFT berhasil dipindahkan.']);
+    }
+
+    return response()->json(['message' => 'Transaksi bukan pending atau sudah diproses.'], 400);
 }
 
+    
 }

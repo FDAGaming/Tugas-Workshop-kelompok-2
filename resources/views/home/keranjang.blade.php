@@ -59,14 +59,15 @@
                     </table>
 
                     <!-- Tombol Checkout -->
-                    <div class="text-end mt-4">
-                        <form action="{{ route('checkout.proses') }}" method="POST">
-                            @csrf
-                            <button type="submit" class="btn btn-success">Proses Checkout</button>
-                        </form>
-                    </div>
+                    <div class="text-center mt-3">
+                                <form action="{{ route('keranjang.checkout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary btn-lg">Lanjutkan ke Checkout</button>
+                                </form>
+                            </div>
                 @endif
             </div>
         </div>
     </div>
+    
 @endsection
