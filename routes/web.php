@@ -10,6 +10,7 @@ use App\Http\Controllers\SettingMenuController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\KeranjangController;
+use App\Http\Controllers\CheckoutController;
 
 Route::get('/login', [LoginController::class, 'indexlogin'])->name('login');
 Route::get('/register', [LoginController::class, 'indexregister'])->name('register');;
@@ -24,6 +25,8 @@ Route::prefix('')->group(function () {
         Route::post('/keranjang/{id}', [KeranjangController::class, 'store'])->name('keranjang.store');
         Route::post('/keranjang/{id}/update', [KeranjangController::class, 'update'])->name('keranjang.update');
         Route::get('/keranjang/{id}/delete', [KeranjangController::class, 'destroy'])->name('keranjang.destroy');
+        Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+        Route::post('/proses-checkout', [CheckoutController::class, 'prosesCheckout'])->name('checkout.proses');
     });
 });
 
