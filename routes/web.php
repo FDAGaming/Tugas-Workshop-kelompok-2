@@ -25,7 +25,7 @@ Route::prefix('')->group(function () {
         Route::post('/keranjang/{id}', [KeranjangController::class, 'store'])->name('keranjang.store');
         Route::post('/keranjang/{id}/update', [KeranjangController::class, 'update'])->name('keranjang.update');
         Route::get('/keranjang/{id}/delete', [KeranjangController::class, 'destroy'])->name('keranjang.destroy');
-        Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+        Route::get('/checkout', [KeranjangController::class, 'checkout'])->name('checkout.index');
         Route::post('/proses-checkout', [CheckoutController::class, 'prosesCheckout'])->name('checkout.proses');
     });
 });
@@ -43,10 +43,12 @@ Route::prefix('dashboard')->middleware('auth.custom')->group(function () {
     Route::resource('obat', ObatController::class);
 });
 
+// Route::get('/checkout', [CheckoutController::class, 'showCheckout']);
+// Route::post('/checkout/process', [CheckoutController::class, 'processPayment']);
+
 Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang.index');
 Route::post('/keranjang/checkout', [KeranjangController::class, 'checkout'])->name('keranjang.checkout');
 
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-        Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
-        Route::post('/midtrans/notification', [CheckoutController::class, 'notification'])->name('midtrans.notification');
-        Route::get('/checkout_sukses/{checkoutId}', [CheckoutController::class, 'simulateSuccess']);
+Route::post('/checkout/proses', [CheckoutController::class, 'prosesCheckout'])->name('checkout.proses');
+Route::post('/midtrans/notification', [CheckoutController::class, 'notification'])->name('midtrans.notification');
+Route::get('/checkout_sukses/{checkoutId}', [CheckoutController::class, 'simulateSuccess']);
