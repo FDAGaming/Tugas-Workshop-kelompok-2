@@ -23,7 +23,7 @@ class UserTest extends TestCase
             'name' => 'Lala',
             'email' => 'lala@example.com',
             'password' => bcrypt('password123'),
-            'foto' => 'default.jpg', // Pastikan kolom foto ada
+            'foto' => 'default.jpg', 
             'role_id' => $role->id,
             'remember_token' => 'randomtoken123',
         ]);
