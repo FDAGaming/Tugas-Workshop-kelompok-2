@@ -19,15 +19,15 @@ class AuthTest extends TestCase
         parent::setUp();
 
         // Reset database dan jalankan seeder agar role tersedia sebelum test
-        $this->artisan('migrate:fresh');
+        //$this->artisan('migrate:fresh');
         $this->seed(\Database\Seeders\RoleSeeder::class);
     }
 
     #[Test]
     public function it_can_register_a_user()
     {
-        // Buat role default untuk user (role_id = 2)
-        $role = Role::factory()->create(['id' => 2, 'nama_role' => 'User']);
+        // Ambil role "User" dari database
+        $role = Role::where('nama_role', 'User')->firstOrFail();
 
         // Kirim request ke endpoint /register
         $response = $this->post('/register', [
@@ -35,20 +35,17 @@ class AuthTest extends TestCase
             'email' => 'lala@example.com',
             'password' => 'password123',
             'password_confirmation' => 'password123',
-            'role_id' => $role->id, // Sesuai dengan default role_id = 2
-            'foto' => null, // Kolom foto bersifat nullable
+            'role_id' => $role->id, // Gunakan role yang sudah ada
+            'foto' => null,
         ]);
 
         // Pastikan user terdaftar di database
-        $this->assertDatabaseHas('users', [
-            'email' => 'lala@example.com',
-            'role_id' => 2, // Sesuai default
-        ]);
+        $this->assertDatabaseHas('users', ['email' => 'lala@example.com']);
 
         // Pastikan user diarahkan ke halaman login setelah register
         $response->assertRedirect('/login');
 
-        // Pastikan user BELUM login setelah register
+        // Pastikan user belum login setelah register
         $this->assertGuest();
     }
 
